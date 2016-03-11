@@ -7,7 +7,10 @@
   class MergeSortTester
 
   ALGORITHM:
-
+1. Splits an array into half until each array has a length of 1
+2. Merge the arrays in reverse order
+3. While merging, compares the array being merged (front element) and then combines then in order from smallest to largest
+4. Cease merging when there is just one 
 
 
   BIG-OH CLASSIFICATION OF ALGORITHM:
@@ -29,10 +32,18 @@
   n=10      time: 6521.12 nanoseconds
   n=100     time: 21956 .05 nanoseconds
   ...
-  n=<huge>  time: 224717.12 nanoseconds
+  n=1000  time: 224717.12 nanoseconds
 
   ANALYSIS:
-  
+  Mean execution times for dataset of size n (after warming-up Java:
+  Batch size: <10000>
+  n=1       time: 314.98 nanoseconds
+  n=10      time: 17850.52 nanoseconds
+  n=100     time: 45994.38 nanoseconds
+  n=1000    time: 583908.13 nanoseconds
+  n=10000   time: 6525105.44 nanoseconds
+
+  Many of the times are just * 10 of the previous one, like for n=10000, it is about 10 * the time for n=1000, suporting our claim of n(log(n)) time.
 
   ======================================*/
 import java.util.Arrays;
@@ -67,7 +78,6 @@ public class MergeSortTester
 
             double temp = System.nanoTime();
             MergeSort.sort(arr);
-
             totalTime += (System.nanoTime() - temp) ;
         }
 
@@ -78,7 +88,7 @@ public class MergeSortTester
 
     public static double mergeTester(int size)
     {
-        return mergeTester(size, 100);
+        return mergeTester(size, 10000);
     }
 
     public static void main( String[] args )
@@ -87,8 +97,8 @@ public class MergeSortTester
         System.out.println("Mean execution times for dataset of size n:");
         System.out.println("Batch size: 100");
         System.out.println("Time in nanoseconds.\n\n");
-
-        for (int i = 1; i < 1001; i = i * 10)
+	mergeTester(0);  //warm up
+        for (int i = 1; i < 10001; i = i * 10)
         {
             System.out.println("n = " + i);
             System.out.println("time: " + mergeTester(i));
