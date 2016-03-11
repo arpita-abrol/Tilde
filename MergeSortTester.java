@@ -11,16 +11,16 @@
 
 
   BIG-OH CLASSIFICATION OF ALGORITHM:
-MergeSort is an O(n(log(n)) notation. 
-It is a 'divide and conquer' type of sort- in order to be able to sort efficiently it requires that the array be split up into smaller arrays, which are sorted.
-These arrays are obtained by splitting the original array into arrays half the size, until the arrays are all of length 1. 
-Since we're splitting everything in half, there will be log(n) splits. 
-Once they are length 1, they are sorted since they are the only number in the array. 
-Then we start merging adjacent lists, doubling the size.
-They are compared while being kind, so that the array remains sorted while increasing in size. 
-Since we are comparing each element of the list individually, there will be n amount of merges.
-This means the complete runtime for the algorithm will be the splits * the number of elements.
-This results in O(n(log(n)).
+  MergeSort is an O(n(log(n)) notation.
+  It is a 'divide and conquer' type of sort- in order to be able to sort efficiently it requires that the array be split up into smaller arrays, which are sorted.
+  These arrays are obtained by splitting the original array into arrays half the size, until the arrays are all of length 1.
+  Since we're splitting everything in half, there will be log(n) splits.
+  Once they are length 1, they are sorted since they are the only number in the array.
+  Then we start merging adjacent lists, doubling the size.
+  They are compared while being kind, so that the array remains sorted while increasing in size.
+  Since we are comparing each element of the list individually, there will be n amount of merges.
+  This means the complete runtime for the algorithm will be the splits * the number of elements.
+  This results in O(n(log(n)).
 
 
   Mean execution times for dataset of size n:
@@ -32,66 +32,69 @@ This results in O(n(log(n)).
   n=<huge>  time: 224717.12 nanoseconds
 
   ANALYSIS:
-  <INSERT YOUR RESULTS ANALYSIS HERE>
-
+  
 
   ======================================*/
+import java.util.Arrays;
 
-public class MergeSortTester 
+public class MergeSortTester
 {
 
-    /******************************
-     * execution time analysis 
-     * <INSERT YOUR DESCRIPTION HERE OF 
-     *  YOUR APPARATUS FOR GENERATING EXECUTION 
-     *  TIME DATA...>
-     ******************************/
-    public static void main( String[] args ) 
+    /*
+      First create some arrays filled with random integers
+      Time how long mergeSort takes
+      Repeat for desired batch size
+    */
+
+    public static int[] makeList(int size) //makes a list of random integers
     {
+        int[] temp = new int[size];
+        for (int i = 0; i < size ; i++)
+        {
+            temp[i] = (int)(Math.random() * 1001);
+        }
+        return temp;
+    }
 
-  public static void main( String[] args ){ 
-    
-        
-    double a = mergeTester(1,100);
-    double b = mergeTester(10,100);
-    double c = mergeTester(100,100);
-    double d = mergeTester(1000,100);
-    System.out.println("The time it takes to sort 1 elements it " +a+" nanoseconds");
-    System.out.println("The time it takes to sort 10 elements it " +b+" nanoseconds");
-    System.out.println("The time it takes to sort 100 elements it " +c+" nanoseconds");
-    System.out.println("The time it takes to sort 1000 elements it " +d+" nanoseconds");
-     
+    //Returns mean timings for mergeSort
+    public static double mergeTester(int size, int a) //a is the # of trials
+    {
+        double totalTime = 0.0;
 
-  
-}//end main
+        for (int i = 0; i < a; i++)
+        {
+            int[] arr = makeList(size);
 
-public static int[] makeList(int listLength){
-  int[] temp = new int[listLength];
-  for (int x = 0; x < listLength ; x ++){
-    temp[x]=(int)(Math.random()*(1001));
-    
-  }
-  return temp;
-}
+            double temp = System.nanoTime();
+            MergeSort.sort(arr);
 
-public static double mergeTester(int listLength, int a){
-  int[] temp=new int[listLength];
-  int y=0;
-  double first;
-  double time=0.0;
-  double end;
-  while (y < a){
-    temp = makeList(listLength);
-    first = System.nanoTime();
-    MergeSort.sort(temp);
-    time += System.nanoTime()-first;
-    y++;
-    
-  }
-  end = accu/ ((double)a);
-  return end;
-  
-  
-}
+            totalTime += (System.nanoTime() - temp) ;
+        }
+
+        double avgTime = totalTime / ((double)a);
+
+        return avgTime;
+    }
+
+    public static double mergeTester(int size)
+    {
+        return mergeTester(size, 100);
+    }
+
+    public static void main( String[] args )
+    {
+        System.out.println();
+        System.out.println("Mean execution times for dataset of size n:");
+        System.out.println("Batch size: 100");
+        System.out.println("Time in nanoseconds.\n\n");
+
+        for (int i = 1; i < 1001; i = i * 10)
+        {
+            System.out.println("n = " + i);
+            System.out.println("time: " + mergeTester(i));
+            System.out.println();
+        }
+
+    }//end main
 
 }//end class
